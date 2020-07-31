@@ -5,9 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+from.models import Pet
+
 @login_required(login_url='/login/')
-def index(request):
-    return render(request, 'index.html')
+
+
+def list_all_pets(request):
+    pet  = Pet.objects.filter(active=True)
+    return render(request, 'list.html', {'pet':pet})
 
 def login_user(request):
     return render(request, 'login.html')

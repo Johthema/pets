@@ -1,9 +1,11 @@
 <!DOCTYPE <!DOCTYPE html>
 <html>
-<header>
-    {% include "model-header.html" %}
-</header>
-    <body>
+    <header>
+      {% include "model-header.html" %}
+    </header>
+
+        {% block content %} {% endblock %}
+        <p></p>
         {% include "model-footer.html" %}
     </body>
 

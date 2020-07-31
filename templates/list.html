@@ -1,0 +1,20 @@
+{% extends "model-page.html" %}
+
+{% block content %}
+    <div class = "container">
+        <div class="row">
+            {% for p in pet %}
+            <div class="col-sm-4">
+                <div class="polaroid">
+                    <img src="{{p.photo.url }}" style="width:100%">
+                    <div class="container">
+                    <p>{{p.city}}</p>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
