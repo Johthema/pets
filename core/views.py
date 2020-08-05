@@ -9,6 +9,11 @@ from.models import Pet
 
 @login_required(login_url='/login/')
 def register_pet(request):
+    pet_id = request.GET.get('id')
+    if pet_id:
+        pet = Pet.objects.get(id=pet_id)
+        if pet.user == request.user:
+             return render(request, 'register-pet.html', {'pet':pet})
     return render(request, 'register-pet.html')
 
 @login_required(login_url='/login/')
@@ -18,9 +23,30 @@ def set_pet(request):
     phone = request.POST.get('phone')
     description = request.POST.get('description')
     photo = request.FILES.get('file')
+    pet_id = request.POST.get('pet-id')
     user = request.user
-    pet = Pet.objects.create(email=email, phone=phone, description=description,
-                            photo=photo, user=user, city=city)
+    if pet_id:
+        pet = Pet.objects.get(id=pet_id)
+        if user == pet.user:
+            pet.email = email
+            pet.phone = phone
+            pet.city = city
+            pet.description = description
+            if photo:
+                pet.photo = photo
+            pet.save()
+    else:
+        user = request.user
+        pet = Pet.objects.create(email=email, phone=phone, description=description,
+                                photo=photo, user=user, city=city)
+    url = '/pet/detail/{}/'.format(pet.id)
+    return redirect(url)
+
+@login_required(login_url='/login/')
+def delete_pet(request, id):
+    pet = Pet.objects.get(id=id)
+    if pet.user == request.user:
+        pet.delete()
     return redirect('/')
 
 @login_required(login_url='/login/')
